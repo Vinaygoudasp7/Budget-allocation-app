@@ -47,9 +47,10 @@ export const AppReducer = (state, action) => {
             return {
                 ...state,
             };
-    case 'CHG_LOCATION':
+
+    case 'CHG_CURRENCY':
             action.type = "DONE";
-            state.Location = action.payload;
+            state.currency = action.payload;
             return {
                 ...state
             }
@@ -68,7 +69,7 @@ const initialState = {
         { id: "Human Resource", name: 'Human Resource', quantity: 0, unitprice: 600 },
         { id: "IT", name: 'IT', quantity: 0, unitprice: 200 },
     ],
-    Location: '£'
+    Location: '₹'
 };
 
 // 2. Creates the context this is the thing our components import and use to get the state
@@ -91,7 +92,7 @@ state.CartValue = totalExpenses;
                 expenses: state.expenses,
                 CartValue: state.CartValue,
                 dispatch,
-                Location: state.Location
+                currency: state.currency
             }}
         >
             {props.children}

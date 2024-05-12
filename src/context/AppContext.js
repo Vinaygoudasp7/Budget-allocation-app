@@ -6,8 +6,8 @@ export const AppReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_QUANTITY':
             let updatedqty = false;
-            state.expenses.map((expense)=>{
-                if(expense.name === action.payload.name) {
+            state.expenses.map((expense) => {
+                if (expense.name === action.payload.name) {
                     expense.quantity = expense.quantity + action.payload.quantity;
                     updatedqty = true;
                 }
@@ -20,23 +20,23 @@ export const AppReducer = (state, action) => {
                 ...state,
             };
 
-            case 'RED_QUANTITY':
-                state.expenses.map((expense)=>{
-                    if(expense.name === action.payload.name) {
-                        expense.quantity = expense.quantity - action.payload.quantity;
-                    }
-                    expense.quantity = expense.quantity < 0 ? 0: expense.quantity;
-                    new_expenses.push(expense);
-                    return true;
-                })
-                state.expenses = new_expenses;
-                action.type = "DONE";
-                return {
-                    ...state,
-                };
+        case 'RED_QUANTITY':
+            state.expenses.map((expense) => {
+                if (expense.name === action.payload.name) {
+                    expense.quantity = expense.quantity - action.payload.quantity;
+                }
+                expense.quantity = expense.quantity < 0 ? 0 : expense.quantity;
+                new_expenses.push(expense);
+                return true;
+            })
+            state.expenses = new_expenses;
+            action.type = "DONE";
+            return {
+                ...state,
+            };
         case 'DELETE_ITEM':
-            state.expenses.map((expense)=>{
-                if(expense.name === action.payload.name) {
+            state.expenses.map((expense) => {
+                if (expense.name === action.payload.name) {
                     expense.quantity = 0;
                 }
                 new_expenses.push(expense);
@@ -48,11 +48,16 @@ export const AppReducer = (state, action) => {
                 ...state,
             };
 
-    case 'CHG_CURRENCY':
+        case 'CHG_CURRENCY':
             action.type = "DONE";
             state.currency = action.payload;
             return {
                 ...state
+            }
+
+        case 'UPDATE_TOTAL_BUDGET':
+            return {
+                ...state, totalbudget: action.payload
             }
 
         default:
@@ -69,7 +74,8 @@ const initialState = {
         { id: "Human Resource", name: 'Human Resource', quantity: 0, unitprice: 600 },
         { id: "IT", name: 'IT', quantity: 0, unitprice: 200 },
     ],
-    Location: '₹'
+    Location: '₹',
+    totalbudget: 0
 };
 
 // 2. Creates the context this is the thing our components import and use to get the state
@@ -82,17 +88,23 @@ export const AppProvider = (props) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
     const totalExpenses = state.expenses.reduce((total, item) => {
-        return (total = total + (item.unitprice*item.quantity));
+        return (total = total + (item.unitprice * item.quantity));
     }, 0);
-state.CartValue = totalExpenses;
+    state.CartValue = totalExpenses;
 
+    // set total budget
+    const setTotalBudget=(total)=>{
+        dispatch({type:"UPDATE_TOTAL_BUDGET",payload:total})
+    }
     return (
         <AppContext.Provider
             value={{
                 expenses: state.expenses,
                 CartValue: state.CartValue,
                 dispatch,
-                currency: state.currency
+                currency: state.currency,
+                totalbudget:state.totalbudget,
+                setTotalBudget
             }}
         >
             {props.children}

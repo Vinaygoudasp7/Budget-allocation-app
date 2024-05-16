@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { IoMdClose } from "react-icons/io";
-
+import { FaPlus, FaMinus } from 'react-icons/fa'
 
 const ExpenseItem = (props) => {
-    const { dispatch, Location } = useContext(AppContext);
-
+    const { dispatch, currency } = useContext(AppContext);
     const handleDeleteItem = () => {
         const item = {
             name: props.name,
@@ -17,16 +16,34 @@ const ExpenseItem = (props) => {
         });
     };
 
+    const handelIncreseBy10 = (depname) => {
+        dispatch({
+            type: "ADD_QUANTITY",
+            payload: {
+                name: depname,
+                quantity: 10
+            }
+        })
+    }
+    const handelDecreseBy10 = (depname) => {
+        dispatch({
+            type: "REMOVE_QUANTITY",
+            payload: {
+                name: depname,
+                quantity: 10
+            }
+        })
+    }
 
     return (
         <tr>
             <td>{props.name}</td>
-            <td>{props.quantity}</td>
-            <td>{Location}{parseInt(props.unitprice)}</td>
-            <td>{Location}{parseInt(props.quantity) * parseInt(props.unitprice)}</td>
+            <td>{currency} {props.quantity}</td>
+            <td><button className='btn btn-light' onClick={() => handelIncreseBy10(props.name)}><FaPlus color='green' /></button></td>
+            <td><button className='btn btn-light' onClick={()=>handelDecreseBy10(props.name)}><FaMinus color='red' /></button></td>
             <td>
-                <button className='btn btn-outline-primary'>
-                    <IoMdClose size='2em' color="black" onClick={handleDeleteItem}></IoMdClose>
+                <button className='btn btn-light fs-4 fw-bolder' >
+                    <IoMdClose color="red" onClick={handleDeleteItem}></IoMdClose>
                 </button>
             </td>
         </tr>

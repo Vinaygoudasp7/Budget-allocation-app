@@ -12,13 +12,14 @@ const Location = () => {
     }
 
     return (
-        <div className='alert alert-secondary'>
-            Currency {
-                <select name="Location" id="Location" onChange={event => changeLocation(event.target.value)}>
-                    <option value="₹">India(₹)</option>
-                    <option value="$">Dollar($)</option>
-                    <option value="€">Euro(€)</option>
-                    <option value="£">Pound(£)</option>
+        <div className='alert alert-secondary d-flex flex-row'>
+            <div className='mx-2 fs-5 fw-bolder'>Curency: </div> {
+                <select className='form-select' name="Location" id="Location" onChange={event => changeLocation(event.target.value)}>
+                    <option value=''>select</option>
+                    <option value="₹">₹ India</option>
+                    <option value="$">$ Dollar</option>
+                    <option value="€">€ Euro</option>
+                    <option value="£">£ Pound</option>
                 </select>
             }
 

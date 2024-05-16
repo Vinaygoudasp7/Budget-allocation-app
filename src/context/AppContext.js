@@ -8,8 +8,28 @@ export const AppReducer = (state, action) => {
             let updatedqty = false;
             state.expenses.map((expense) => {
                 if (expense.name === action.payload.name) {
-                    expense.quantity = expense.quantity + action.payload.quantity;
-                    updatedqty = true;
+                    if (state.spentamt < state.totalbudget) {
+                        expense.quantity = expense.quantity + action.payload.quantity;
+                        updatedqty = true;
+                    }else{
+                        window.alert('You cannot reduce the budget value lower than the spending')
+                    }
+                }
+                new_expenses.push(expense);
+                return true;
+            })
+            state.expenses = new_expenses;
+            action.type = "DONE";
+            return {
+                ...state,
+            };
+
+        case 'REMOVE_QUANTITY':
+            let removedqyt = false
+            state.expenses.map((expense) => {
+                if (expense.name === action.payload.name) {
+                    expense.quantity = Math.max(0, expense.quantity - action.payload.quantity);
+                    removedqyt = true;
                 }
                 new_expenses.push(expense);
                 return true;
@@ -92,9 +112,17 @@ export const AppProvider = (props) => {
     }, 0);
     state.CartValue = totalExpenses;
 
+    const totalspentamt = state.expenses.reduce((total, expense) => {
+        return total + parseInt(expense.quantity)
+    }, 0)
+    state.spentamt = totalspentamt
+
+    const totalremaningamt = state.totalbudget - totalspentamt
+    state.remaningamt = totalremaningamt
+
     // set total budget
-    const setTotalBudget=(total)=>{
-        dispatch({type:"UPDATE_TOTAL_BUDGET",payload:total})
+    const setTotalBudget = (total) => {
+        dispatch({ type: "UPDATE_TOTAL_BUDGET", payload: total })
     }
     return (
         <AppContext.Provider
@@ -103,7 +131,9 @@ export const AppProvider = (props) => {
                 CartValue: state.CartValue,
                 dispatch,
                 currency: state.currency,
-                totalbudget:state.totalbudget,
+                totalbudget: state.totalbudget,
+                totalspentamt: state.spentamt,
+                totalremaningamt: state.remaningamt,
                 setTotalBudget
             }}
         >

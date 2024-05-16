@@ -27,15 +27,35 @@
 .App-link {
   color: #61dafb;
 }
+
 .btn-success {
-    --bs-btn-bg: #badbcc!important;
+  --bs-btn-bg: #badbcc !important;
 }
 
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.budgettheam {
+  background-color: #407ff3;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.remainingtheam {
+  background-color: #10d670;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.spenttheam {
+  background-color: #ed4738;
+  padding: 15px;
+  border-radius: 10px;
 }
